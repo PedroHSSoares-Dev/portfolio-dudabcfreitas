@@ -1,9 +1,15 @@
 import { motion } from 'framer-motion'
 import { useLanguage } from './LanguageContext'
+import { useSobre } from '../hooks/useSobre'
 import { fadeInUp, fadeInRight, staggerContainer } from '../utils/animations'
 
 export default function Hero() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
+  const { sobre } = useSobre()
+
+  // Notion bio with fallback to translations.js
+  const bio1 = sobre['Bio 1']?.[lang] || t.hero.bio1
+  const bio2 = sobre['Bio 2']?.[lang] || t.hero.bio2
 
   return (
     <section id="home" className="min-h-screen flex items-center py-24 pt-32">
@@ -79,14 +85,14 @@ export default function Hero() {
                 className="font-body leading-[1.8] text-on-surface-variant"
                 style={{ fontSize: '15px', maxWidth: '440px' }}
               >
-                {t.hero.bio1}
+                {bio1}
               </motion.p>
               <motion.p
                 variants={fadeInUp}
                 className="font-body leading-[1.8] text-on-surface-variant"
                 style={{ fontSize: '15px', maxWidth: '440px' }}
               >
-                {t.hero.bio2}
+                {bio2}
               </motion.p>
             </motion.div>
 

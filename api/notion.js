@@ -2,17 +2,24 @@ export default async function handler(req, res) {
   const { database } = req.query
 
   const dbMap = {
-    projects: process.env.NOTION_PROJECTS_DB,
-    skills: process.env.NOTION_SKILLS_DB,
-    sobre: process.env.NOTION_SOBRE_DB,
+    projects:    process.env.NOTION_PROJECTS_DB,
+    skills:      process.env.NOTION_SKILLS_DB,
+    sobre:       process.env.NOTION_SOBRE_DB,
     experiences: process.env.NOTION_EXPERIENCES_DB,
-    education: process.env.NOTION_EDUCATION_DB,
+    education:   process.env.NOTION_EDUCATION_DB,
   }
+
+  // Only these databases have a Publicado checkbox column
+  const hasPublicado = ['projects', 'experiences', 'education']
 
   const databaseId = dbMap[database]
   if (!databaseId) {
     return res.status(400).json({ error: `Unknown database: ${database}` })
   }
+
+  const body = hasPublicado.includes(database)
+    ? { filter: { property: 'Publicado', checkbox: { equals: true } } }
+    : {}
 
   try {
     const response = await fetch(
@@ -24,15 +31,7 @@ export default async function handler(req, res) {
           'Notion-Version': '2022-06-28',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          filter: {
-            property: 'Publicado',
-            checkbox: { equals: true },
-          },
-          sorts: [
-            { property: 'Ordem', direction: 'ascending' },
-          ],
-        }),
+        body: JSON.stringify(body),
       }
     )
 

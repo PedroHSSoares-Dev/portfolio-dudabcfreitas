@@ -3,6 +3,47 @@ import { motion, useInView } from 'framer-motion'
 import { useLanguage } from './LanguageContext'
 import { useProjects } from '../hooks/useProjects'
 
+function ToolPills({ tools }) {
+  if (!tools || tools.length === 0) return null
+  const visible = tools.slice(0, 3)
+  const overflow = tools.length - 3
+
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '12px' }}>
+      {visible.map(tool => (
+        <span key={tool} style={{
+          fontSize: '11px',
+          fontWeight: 600,
+          color: '#7a5900',
+          background: 'rgba(235,185,77,0.15)',
+          border: '1px solid rgba(235,185,77,0.3)',
+          padding: '3px 10px',
+          borderRadius: '999px',
+          fontFamily: 'Inter, sans-serif',
+          whiteSpace: 'nowrap',
+        }}>
+          {tool}
+        </span>
+      ))}
+      {overflow > 0 && (
+        <span style={{
+          fontSize: '11px',
+          fontWeight: 600,
+          color: '#807664',
+          background: '#f3f3f3',
+          border: '1px solid #e8e8e8',
+          padding: '3px 10px',
+          borderRadius: '999px',
+          fontFamily: 'Inter, sans-serif',
+          whiteSpace: 'nowrap',
+        }}>
+          +{overflow}
+        </span>
+      )}
+    </div>
+  )
+}
+
 function ProjectCard({ project, index, isInView }) {
   const coverImage = project.images?.[0] ?? project.image ?? null
 
@@ -61,6 +102,7 @@ function ProjectCard({ project, index, isInView }) {
             {project.description ?? project.desc}
           </p>
         )}
+        <ToolPills tools={project.tools} />
       </div>
     </motion.div>
   )

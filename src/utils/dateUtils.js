@@ -9,8 +9,9 @@
  * @returns {{ years: number, months: number }}
  */
 export function calculateDuration(startDate, endDate = null) {
-    const start = new Date(startDate + '-01');
-    const end = endDate ? new Date(endDate + '-01') : new Date();
+    const norm = d => d ? d.slice(0, 7) : null
+    const start = new Date(norm(startDate) + '-01');
+    const end = endDate ? new Date(norm(endDate) + '-01') : new Date();
 
     let years = end.getFullYear() - start.getFullYear();
     let months = end.getMonth() - start.getMonth();
@@ -82,8 +83,9 @@ export function formatPeriod(startDate, endDate, lang = 'pt') {
  * @returns {{ current: number, total: number, progress: number }}
  */
 export function calculateSemesterProgress(startDate, endDate, totalSemesters) {
-    const start = new Date(startDate + '-01');
-    const end = new Date(endDate + '-01');
+    const norm = d => d ? d.slice(0, 7) : null
+    const start = new Date(norm(startDate) + '-01');
+    const end = new Date(norm(endDate) + '-01');
     const now = new Date();
 
     if (now >= end) {

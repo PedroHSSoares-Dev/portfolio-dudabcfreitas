@@ -10,7 +10,17 @@ export default function Experience() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
 
-  if (loading || experiences.length === 0) return null
+  if (loading) return (
+    <section className="py-24" style={{ background: '#f3f3f3' }}>
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="h-3 w-28 bg-[#e8e8e8] rounded mb-3 animate-pulse" />
+        <div className="h-8 w-64 bg-[#e8e8e8] rounded mb-14 animate-pulse" />
+        <div className="h-28 bg-[#e8e8e8] rounded animate-pulse" />
+      </div>
+    </section>
+  )
+
+  if (experiences.length === 0) return null
 
   return (
     <section ref={ref} className="py-24" style={{ background: '#f3f3f3' }}>

@@ -5,10 +5,12 @@ import { calculateSemesterProgress, formatPeriod } from '../utils/dateUtils'
 import { useEducation } from '../hooks/useEducation'
 
 const ProgressPill = ({ current, total }) => {
+  if (total == null || total === 0) return null
   const isComplete = current >= total
+  const pct = Math.min(100, Math.max(0, (current / total) * 100))
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
       <div style={{
         position: 'relative',
         width: '64px',
@@ -22,7 +24,7 @@ const ProgressPill = ({ current, total }) => {
           left: 0,
           top: 0,
           height: '100%',
-          width: `${(current / total) * 100}%`,
+          width: `${pct}%`,
           background: isComplete ? '#4f7a28' : '#ebb94d',
           borderRadius: '999px',
           transition: 'width 0.5s ease',
@@ -101,18 +103,22 @@ export default function About() {
 
             {/* Timeline */}
             <div
-              className="relative pl-6"
-              style={{ borderLeft: '2px solid #d2c5b0' }}
+              style={{ position: 'relative', paddingLeft: '20px', borderLeft: '2px solid #d2c5b0' }}
             >
               {educationLoading ? (
                 <EducationSkeleton />
               ) : (
                 education.map((item, i) => (
-                  <div key={item.id ?? i} className="relative mb-8 last:mb-0">
-                    {/* Gold dot */}
+                  <div key={item.id ?? i} style={{ position: 'relative', marginBottom: i < education.length - 1 ? '32px' : 0 }}>
+                    {/* Gold dot — centered on the border line */}
                     <div
-                      className="absolute -left-[1.45rem] top-1 w-3 h-3 rounded-full"
                       style={{
+                        position: 'absolute',
+                        left: '-25px',
+                        top: '4px',
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
                         background: '#7a5900',
                         border: '2px solid #f9f9f9',
                         boxShadow: '0 0 0 2px #d2c5b0',
@@ -129,12 +135,13 @@ export default function About() {
                     <p className="font-body text-[13px] text-on-surface-variant font-medium mb-2">
                       {item.institution}
                     </p>
-                    {item.startDate && item.totalSemesters && (() => {
+                    {item.startDate && item.totalSemesters != null && (() => {
                       const progress = calculateSemesterProgress(
                         item.startDate,
                         item.endDate,
                         item.totalSemesters
                       )
+                      if (!progress || progress.total == null) return null
                       return <ProgressPill current={progress.current} total={progress.total} />
                     })()}
                   </div>
