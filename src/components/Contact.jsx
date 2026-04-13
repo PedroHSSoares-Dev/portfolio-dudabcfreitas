@@ -65,17 +65,6 @@ export default function Contact() {
               transition={{ duration: 0.55, delay: 0.32 }}
               className="flex flex-wrap gap-4"
             >
-              {/* Primary — download portfolio */}
-              <a
-                href="#"
-                className="inline-flex items-center gap-2 px-6 py-3 font-body font-medium text-[14px] rounded-lg transition-opacity duration-200 hover:opacity-85 active:opacity-75"
-                style={{ background: '#7a5900', color: '#ffdea2' }}
-              >
-                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>
-                  download
-                </span>
-                {t.contact.btnPrimary}
-              </a>
 
               {/* Secondary — get in touch */}
               <a
