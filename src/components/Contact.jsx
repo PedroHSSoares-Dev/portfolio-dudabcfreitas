@@ -66,7 +66,7 @@ export default function Contact() {
               className="flex flex-wrap gap-4"
             >
 
-              {/* Secondary — get in touch */}
+              {/* Entrar em Contato */}
               <a
                 href={contactHref}
                 target="_blank"
