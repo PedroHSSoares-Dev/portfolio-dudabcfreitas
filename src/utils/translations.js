@@ -55,6 +55,9 @@ export const translations = {
       sectionLabel: 'Trabalhos',
       sectionTitle: 'Projetos Acadêmicos',
       items: [],
+      showMore: 'Ver mais',
+      showLess: 'Ver menos',
+      viewProject: 'Ver projeto',
     },
     contact: {
       title: 'Vamos Conversar?',
@@ -63,7 +66,7 @@ export const translations = {
       btnPrimary: 'Download Portfólio Acadêmico',
       btnSecondary: 'Entrar em Contato',
       linkedin: 'https://www.linkedin.com/in/dudabcfreitas/',
-      email: '',
+      email: 'mariaeduardabenassecannalongad@gmail.com',
     },
     experience: {
       sectionLabel: 'Trajetória',
@@ -129,6 +132,9 @@ export const translations = {
       sectionLabel: 'Works',
       sectionTitle: 'Academic Projects',
       items: [],
+      showMore: 'Show more',
+      showLess: 'Show less',
+      viewProject: 'View project',
     },
     contact: {
       title: "Let's Talk?",
@@ -137,7 +143,7 @@ export const translations = {
       btnPrimary: 'Download Academic Portfolio',
       btnSecondary: 'Get in Touch',
       linkedin: 'https://www.linkedin.com/in/dudabcfreitas/',
-      email: '',
+      email: 'mariaeduardabenassecannalongad@gmail.com',
     },
     experience: {
       sectionLabel: 'Career',

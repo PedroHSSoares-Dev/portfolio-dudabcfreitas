@@ -18,7 +18,8 @@ export function useProjects() {
             featured: page.properties['Destaque']?.checkbox ?? false,
             images: (page.properties['Imagens']?.files ?? []).map(f =>
               f.type === 'external' ? f.external.url : f.file?.url ?? ''
-            ),
+            ).filter(Boolean),
+            linkedin: page.properties['Linkedin']?.url ?? null,
             tools: (page.properties['Ferramentas']?.multi_select ?? []).map(t => t.name),
           }))
           .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0))

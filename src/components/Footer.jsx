@@ -4,9 +4,8 @@ export default function Footer() {
   const { t } = useLanguage()
 
   const links = [
-    { label: 'Instagram', href: '#' },
     { label: 'LinkedIn', href: t.contact.linkedin },
-    { label: 'Email', href: t.contact.email ? `mailto:${t.contact.email}` : '#' },
+    { label: 'Email', href: `mailto:${t.contact.email}` },
   ]
 
   return (

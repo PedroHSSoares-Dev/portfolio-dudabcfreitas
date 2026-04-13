@@ -111,15 +111,34 @@ export default function Skills() {
           </h2>
         </motion.div>
 
-        {/* Row 1 — 4 skill cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-          {loading
-            ? Array.from({ length: 4 }, (_, i) => (
-                <SkillCardSkeleton key={i} index={i} isInView={isInView} />
-              ))
-            : items.map((item, i) => (
-                <SkillCard key={item.id ?? i} item={item} index={i} isInView={isInView} />
-              ))}
+        {/* Row 1 — skills carousel */}
+        <div className="mb-4">
+          <style>{`.skills-carousel::-webkit-scrollbar { display: none; }`}</style>
+          <div
+            className="skills-carousel"
+            style={{
+              display: 'flex',
+              overflowX: 'auto',
+              scrollSnapType: 'x mandatory',
+              gap: '16px',
+              paddingBottom: '16px',
+              WebkitOverflowScrolling: 'touch',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+            }}
+          >
+            {loading
+              ? Array.from({ length: 4 }, (_, i) => (
+                  <div key={i} style={{ flex: '0 0 220px', scrollSnapAlign: 'start' }}>
+                    <SkillCardSkeleton index={i} isInView={isInView} />
+                  </div>
+                ))
+              : items.map((item, i) => (
+                  <div key={item.id ?? i} style={{ flex: '0 0 220px', scrollSnapAlign: 'start' }}>
+                    <SkillCard item={item} index={i} isInView={isInView} />
+                  </div>
+                ))}
+          </div>
         </div>
 
         {/* Row 2 — dark strip + 3D canvas */}

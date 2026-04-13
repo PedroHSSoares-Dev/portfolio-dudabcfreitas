@@ -1,7 +1,16 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { useLanguage } from './LanguageContext'
 import { useProjects } from '../hooks/useProjects'
+
+const PROFILE_URL = 'https://www.linkedin.com/in/dudabcfreitas/'
+
+function getLinkedinUrl(projectUrl) {
+  if (!projectUrl) return PROFILE_URL
+  const isMobile = typeof navigator !== 'undefined' &&
+    /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+  return isMobile ? PROFILE_URL : projectUrl
+}
 
 function ToolPills({ tools }) {
   if (!tools || tools.length === 0) return null
@@ -12,30 +21,21 @@ function ToolPills({ tools }) {
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '12px' }}>
       {visible.map(tool => (
         <span key={tool} style={{
-          fontSize: '11px',
-          fontWeight: 600,
-          color: '#7a5900',
+          fontSize: '11px', fontWeight: 600, color: '#7a5900',
           background: 'rgba(235,185,77,0.15)',
           border: '1px solid rgba(235,185,77,0.3)',
-          padding: '3px 10px',
-          borderRadius: '999px',
-          fontFamily: 'Inter, sans-serif',
-          whiteSpace: 'nowrap',
+          padding: '3px 10px', borderRadius: '999px',
+          fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap',
         }}>
           {tool}
         </span>
       ))}
       {overflow > 0 && (
         <span style={{
-          fontSize: '11px',
-          fontWeight: 600,
-          color: '#807664',
-          background: '#f3f3f3',
-          border: '1px solid #e8e8e8',
-          padding: '3px 10px',
-          borderRadius: '999px',
-          fontFamily: 'Inter, sans-serif',
-          whiteSpace: 'nowrap',
+          fontSize: '11px', fontWeight: 600, color: '#807664',
+          background: '#f3f3f3', border: '1px solid #e8e8e8',
+          padding: '3px 10px', borderRadius: '999px',
+          fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap',
         }}>
           +{overflow}
         </span>
@@ -44,48 +44,49 @@ function ToolPills({ tools }) {
   )
 }
 
-function ProjectCard({ project, index, isInView }) {
-  const coverImage = project.images?.[0] ?? project.image ?? null
+function ProjectCard({ project, index, isInView, t }) {
+  const coverImage = project.images?.[0] ?? null
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay: 0.1 + index * 0.1 }}
+      transition={{ duration: 0.6, delay: 0.1 + (index % 3) * 0.1 }}
       className="group rounded-lg overflow-hidden cursor-pointer"
       style={{ boxShadow: '0 10px 40px rgba(26,28,28,0.04)' }}
     >
       {/* Image area */}
-      <div
-        className="w-full bg-[#eeeeee] relative overflow-hidden"
-        style={{ aspectRatio: '16/9' }}
+      <a
+        href={getLinkedinUrl(project.linkedin)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block"
       >
-        {coverImage && (
-          <img
-            src={coverImage}
-            alt={project.title}
-            className="w-full h-full object-cover"
-          />
-        )}
-        {/* Glassmorphism hover overlay */}
         <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-          style={{
-            background: 'rgba(249,249,249,0.85)',
-            backdropFilter: 'blur(10px)',
-          }}
+          className="w-full bg-[#eeeeee] relative overflow-hidden"
+          style={{ aspectRatio: '16/9' }}
         >
-          <span className="font-body text-[13px] text-primary font-medium tracking-wide">
-            Ver projeto →
-          </span>
+          {coverImage && (
+            <img
+              src={coverImage}
+              alt={project.title}
+              className="w-full h-full object-cover"
+            />
+          )}
+          {/* Glassmorphism hover overlay */}
+          <div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+            style={{ background: 'rgba(249,249,249,0.85)', backdropFilter: 'blur(10px)' }}
+          >
+            <span className="font-body text-[13px] text-primary font-medium tracking-wide">
+              {t.projects.viewProject} →
+            </span>
+          </div>
         </div>
-      </div>
+      </a>
 
       {/* Card body */}
-      <div
-        className="p-5 bg-white"
-        style={{ borderBottom: '3px solid #ebb94d' }}
-      >
+      <div className="p-5 bg-white" style={{ borderBottom: '3px solid #ebb94d' }}>
         {project.category && (
           <span
             className="inline-flex items-center px-2.5 py-0.5 rounded-full font-body text-[11px] font-medium mb-3"
@@ -97,9 +98,9 @@ function ProjectCard({ project, index, isInView }) {
         <h3 className="font-headline font-bold text-on-surface text-base mb-2 tracking-tight">
           {project.title}
         </h3>
-        {(project.description || project.desc) && (
+        {project.description && (
           <p className="font-body text-[13px] text-on-surface-variant leading-relaxed">
-            {project.description ?? project.desc}
+            {project.description}
           </p>
         )}
         <ToolPills tools={project.tools} />
@@ -135,7 +136,6 @@ function EmptyState({ isInView, lang }) {
       transition={{ duration: 0.6, delay: 0.2 }}
       className="py-28 flex flex-col items-center justify-center"
     >
-      {/* Architectural crosshair decoration */}
       <div className="relative w-20 h-20 mb-10">
         <div
           className="absolute top-1/2 left-0 right-0"
@@ -168,11 +168,7 @@ function EmptyState({ isInView, lang }) {
           style={{ background: '#ebb94d', transform: 'translate(-50%, -50%)' }}
         />
       </div>
-
-      <h3
-        className="font-headline font-bold text-on-surface mb-3 tracking-tight"
-        style={{ fontSize: '20px' }}
-      >
+      <h3 className="font-headline font-bold text-on-surface mb-3 tracking-tight" style={{ fontSize: '20px' }}>
         {lang === 'pt' ? 'Projetos em Desenvolvimento' : 'Projects in Development'}
       </h3>
       <p className="font-body text-[14px] text-on-surface-variant text-center opacity-60 max-w-xs leading-relaxed">
@@ -189,6 +185,13 @@ export default function Projects() {
   const { projects, loading } = useProjects()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
+  const [showAll, setShowAll] = useState(false)
+
+  const isMobile = typeof navigator !== 'undefined' &&
+    /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+
+  const firstThree = projects.slice(0, 3)
+  const remaining = projects.slice(3)
 
   return (
     <section id="projects" className="py-24 bg-surface-low" ref={ref}>
@@ -219,11 +222,78 @@ export default function Projects() {
           </div>
         ) : projects.length === 0 ? (
           <EmptyState isInView={isInView} lang={lang} />
+        ) : isMobile ? (
+          /* Mobile — horizontal swipe carousel */
+          <div>
+            <style>{`.proj-carousel::-webkit-scrollbar { display: none; }`}</style>
+            <div
+              className="proj-carousel"
+              style={{
+                display: 'flex',
+                overflowX: 'auto',
+                scrollSnapType: 'x mandatory',
+                gap: '16px',
+                paddingBottom: '16px',
+                WebkitOverflowScrolling: 'touch',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+              }}
+            >
+              {projects.map((project, i) => (
+                <div key={project.id ?? i} style={{ flex: '0 0 80vw', scrollSnapAlign: 'start' }}>
+                  <ProjectCard project={project} index={i} isInView={isInView} t={t} />
+                </div>
+              ))}
+            </div>
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project, i) => (
-              <ProjectCard key={project.id ?? i} project={project} index={i} isInView={isInView} />
-            ))}
+          /* Desktop — grid with show more/less */
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {firstThree.map((project, i) => (
+                <ProjectCard key={project.id ?? i} project={project} index={i} isInView={isInView} t={t} />
+              ))}
+            </div>
+
+            {remaining.length > 0 && (
+              <>
+                <div
+                  style={{
+                    overflow: 'hidden',
+                    maxHeight: showAll ? '2000px' : '0',
+                    transition: 'max-height 0.5s ease',
+                  }}
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+                    {remaining.map((project, i) => (
+                      <ProjectCard
+                        key={project.id ?? i}
+                        project={project}
+                        index={i + 3}
+                        isInView={isInView}
+                        t={t}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex justify-center mt-10">
+                  <button
+                    onClick={() => setShowAll(v => !v)}
+                    className="inline-flex items-center gap-2 px-6 py-3 font-body font-medium text-[14px] transition-opacity duration-200 hover:opacity-80"
+                    style={{
+                      background: 'transparent',
+                      border: '2px solid #d2c5b0',
+                      borderRadius: '8px',
+                      color: '#7a5900',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {showAll ? t.projects.showLess : t.projects.showMore}
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
