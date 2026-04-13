@@ -2,14 +2,25 @@ import { motion } from 'framer-motion'
 import { useLanguage } from './LanguageContext'
 import { useSobre } from '../hooks/useSobre'
 import { fadeInUp, fadeInRight, staggerContainer } from '../utils/animations'
+import { calculateSemesterProgress } from '../utils/dateUtils'
 
 export default function Hero() {
   const { t, lang } = useLanguage()
   const { sobre } = useSobre()
 
-  // Notion bio with fallback to translations.js
-  const bio1 = sobre['Bio 1']?.[lang] || t.hero.bio1
+  // 1. Calcula o progresso atual com as datas de início e fim do curso
+  // Usando fevereiro de 2025 a dezembro de 2030, com 10 semestres totais
+  const progress = calculateSemesterProgress('2025-02', '2030-12', 10)
+  const currentSemester = progress ? progress.current : 2
+
+  // Notion bio with fallback to translations.js. Usamos 'let' no bio1 para poder modificar o texto.
+  let bio1 = sobre['Bio 1']?.[lang] || t.hero.bio1
   const bio2 = sobre['Bio 2']?.[lang] || t.hero.bio2
+
+  // 2. Substitui a tag "{semestre}" ou "{semester}" pelo número automático
+  if (bio1) {
+    bio1 = bio1.replace('{semestre}', currentSemester).replace('{semester}', currentSemester)
+  }
 
   return (
     <section id="home" className="min-h-screen flex items-center py-24 pt-32">

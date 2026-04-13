@@ -9,7 +9,7 @@ export const translations = {
     hero: {
       eyebrow: 'Estudante de Arquitetura e Urbanismo',
       name: 'Maria Eduarda Freitas',
-      bio1: 'Cursando Arquitetura e Urbanismo na Universidade Anhembi Morumbi, busco explorar a relação entre pessoas e o espaço construído através de um design sensível e funcional.',
+      bio1: 'Cursando o {semestre}º semestre de Arquitetura e Urbanismo na Universidade Anhembi Morumbi, busco explorar a relação entre pessoas e o espaço construído através de um design sensível e funcional.',
       bio2: 'Interessada em urbanismo sustentável e arquitetura de interiores, com foco no desenvolvimento técnico e na criação de soluções espaciais que transformam a qualidade de vida.',
     },
     about: {
@@ -86,7 +86,7 @@ export const translations = {
     hero: {
       eyebrow: 'Architecture & Urbanism Student',
       name: 'Maria Eduarda Freitas',
-      bio1: 'Currently in my 2nd semester of Architecture and Urbanism at Anhembi Morumbi University, I explore the relationship between people and built space through sensitive and functional design.',
+      bio1: 'Currently in semester {semester} of Architecture and Urbanism at Anhembi Morumbi University, I explore the relationship between people and built space through sensitive and functional design.',
       bio2: 'Interested in sustainable urbanism and interior architecture, focused on technical development and creating spatial solutions that transform quality of life.',
     },
     about: {
